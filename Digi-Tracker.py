@@ -59,7 +59,7 @@ def newDigFrame(sleep, counter, img):
             _, cntr, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             #return if no contour is found
             if(not len(cntr)>0):
-                return 0
+                return 0, -1
             max_cnt = max(cntr, key=cv2.contourArea)
             x,y,w,h = cv2.boundingRect(max_cnt)
             roi = img[ceil(y):ceil(y+h), ceil(x):ceil(x+w)]
@@ -84,7 +84,7 @@ upper_col, lower_col = colorPicker([0, 0, 255])
 
 
 while True:
-    counter, digit = newDigFrame(10, counter, const)
+    counter, digit = newDigFrame(5, counter, const)
     
     counter = counter + 1
     #frame read bool and frame
