@@ -21,6 +21,7 @@ model = model_from_json(loaded_model_json)
 model.load_weights("models/model.h5")
 print("Loaded model from disk")
 
+
 #GLOBAL VARIABLES
 #create video capture object
 cap = cv2.VideoCapture(0)
@@ -28,9 +29,10 @@ f_queue = deque(maxlen= 300)
 const = 0
 counter = 0
 start_time = time.time()
-test = 0
-sl_flag = 0
 prev_digit = -1
+
+
+#function to return upper and lower hsv value for a RGB valye
 def colorPicker(color):
     color = np.uint8([[color]])
     hsv = cv2.cvtColor(color, cv2.COLOR_RGB2HSV)
@@ -38,11 +40,15 @@ def colorPicker(color):
     upper = np.array([hsv[0][0][0] + 10, 255, 255])
     return upper, lower
 #print(lower_col, upper_col)
+
+
+#to create Empty(black) image 
 def createEmFrame(shape):
     blank_image = np.zeros((shape[0],shape[1],3), np.uint8)
     return blank_image
 
-def newDigFrame(sleep, counter,test, img):
+
+def newDigFrame(sleep, counter, img):
     global start_time, f_queue
     if(int((time.time() - start_time))%sleep == 0 and (time.time()-start_time)>1):
         start_time = time.time()
@@ -73,10 +79,12 @@ def newDigFrame(sleep, counter,test, img):
         return 0, -1
     return counter, 10
 
+
 upper_col, lower_col = colorPicker([0, 0, 255])
+
+
 while True:
-    test = test + 1
-    counter, digit = newDigFrame(10, counter, test, const)
+    counter, digit = newDigFrame(10, counter, const)
     
     counter = counter + 1
     #frame read bool and frame
@@ -130,6 +138,6 @@ while True:
         break
 
 # When everything done, release the capture
-#cap.release()
-cv2.imshow("Test", const)
+cap.release()
+#cv2.imshow("Test", const)
 cv2.destroyAllWindows()
